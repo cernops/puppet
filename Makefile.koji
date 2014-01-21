@@ -1,0 +1,36 @@
+# makefile for puppet labs git clone of puppet
+# to something that koji can eat.
+#
+all: sources
+
+sources:
+	git update-index --assume-unchanged puppet.spec
+	rake package:bootstrap
+	# Pathname.to_path not available on ruby 1.8.7
+	sed -i -e "s#\.to_path#.to_s#g" ext/packaging/lib/packaging/tar.rb
+	rake package:tar --trace
+	cp pkg/puppet-*.tar.gz .
+	tar zxvf puppet-*.tar.gz
+	cp puppet-*/ext/redhat/puppet.spec puppet.spec
+
+scratch:
+	koji build ai7 --nowait --scratch  git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+	koji build ai6 --nowait --scratch  git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+	koji build ai5 --nowait --scratch  git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+
+build:
+	koji build ai7 --nowait git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+	koji build ai6 --nowait git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+	koji build ai5 --nowait git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+
+rpm:	all
+	rpmbuild --define "_sourcedir ${PWD}" -ba puppet.spec
+
+srpm: all
+	rpmbuild-md5 -bs --define 'dist .ai5' --define "_sourcedir ${PWD}" puppet.spec
+	rpmbuild -bs --define 'dist .ai6' --define "_sourcedir ${PWD}" puppet.spec
+	rpmbuild -bs --define 'dist .ai7' --define "_sourcedir ${PWD}" puppet.spec
+
+
+
+
