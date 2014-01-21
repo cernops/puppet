@@ -20,3 +20,4 @@ Gemfile.local
 puppet-acceptance/
 /.project
 .idea/
+puppet*tar.gz
