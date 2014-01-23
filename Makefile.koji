@@ -6,8 +6,10 @@ all: sources
 sources:
 	git update-index --assume-unchanged puppet.spec
 	rake package:bootstrap
-	rake package:srpm
-	rpm -Uvh --define "_sourcedir ${PWD}" --define "_specdir ${PWD}" pkg/srpm/puppet-*.src.rpm
+	rake package:tar
+	cp pkg/puppet-*.tar.gz .
+	tar zxvf puppet-*.tar.gz
+	cp puppet-*/ext/redhat/puppet.spec puppet.spec
 
 scratch:
 	koji build ai6 --nowait --scratch  git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
