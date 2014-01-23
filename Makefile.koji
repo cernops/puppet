@@ -1,0 +1,22 @@
+# makefile for puppet labs git clone of puppet
+# to something that koji can eat.
+#
+all: sources
+
+sources:
+	git update-index --assume-unchanged puppet.spec
+	rake package:bootstrap
+	rake package:srpm
+	rpm -Uvh --define "_sourcedir ${PWD}" --define "_specdir ${PWD}" pkg/srpm/puppet-*.src.rpm
+
+scratch:
+	koji build ai6 --nowait --scratch  git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+	koji build ai5 --nowait --scratch  git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+
+build:
+	koji build ai6 --nowait git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+	koji build ai5 --nowait git+https://github.com/cernops/puppet#$(shell git rev-parse HEAD)
+
+rpm:	all
+	rpmbuild --define "_sourcedir ${PWD}" -ba puppet.spec
+
