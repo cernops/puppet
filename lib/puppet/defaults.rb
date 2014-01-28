@@ -2022,8 +2022,21 @@ EOT
       :desc => "Configure the backend terminus used for StoreConfigs.
         By default, this uses the ActiveRecord store, which directly talks to the
         database from within the Puppet Master process."
-    }
-  )
+    },
+    :pluginsync_filter_enable => {
+      :default => false,
+      :desc => "Enable server-side pluginsync filter based on a Hiera key."
+    },
+    :pluginsync_filter_client_enable_key => {
+      :type => :string,
+      :default => "pluginsync_filter_enable",
+      :desc => "Hiera key used to enable (client-side) the pluginsync filter."
+    },
+    :pluginsync_filter_client_whitelist_key => {
+      :type => :string,
+      :default => "pluginsync_filter",
+      :desc => "Hiera key used to figure out the list of modules to be pluginsynced."
+    }  )
 
   define_settings(:parser,
     :templatedir => {
