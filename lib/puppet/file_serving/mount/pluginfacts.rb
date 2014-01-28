@@ -17,7 +17,20 @@ class Puppet::FileServing::Mount::PluginFacts < Puppet::FileServing::Mount
   def search(relative_path, request)
     # We currently only support one kind of search on plugins - return
     # them all.
-    paths = request.environment.modules.find_all { |mod| mod.pluginfacts? }.collect { |mod| mod.plugin_fact_directory }
+    Puppet.debug("Warning: calling Plugins.search with empty module path.") if request.environment.modules.empty?
+
+    modules = request.environment.modules.find_all { |mod| mod.pluginfacts? }
+
+    whitelist = find_node_whitelist(request) if Puppet.settings[:pluginsync_filter_enable]
+
+    if whitelist
+        Puppet.debug "Modules to be pluginsynced for external facts: #{whitelist.inspect}"
+        modules = modules.select { |mod| whitelist.include? mod.name }
+    else
+        Puppet.debug "Pluginsync filter not enabled or not found, all modules will be included"
+    end
+    paths = modules.collect { |mod| mod.plugin_fact_directory }
+
     if paths.empty?
       # If the modulepath is valid then we still need to return a valid root
       # directory for the search, but make sure nothing inside it is
