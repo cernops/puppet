@@ -6,6 +6,8 @@ all: sources
 sources:
 	git update-index --assume-unchanged puppet.spec
 	rake package:bootstrap
+	# Pathname.to_path not available on ruby 1.8.7
+	sed -i -e "s#\.to_path#.to_s#g" ext/packaging/lib/packaging/tar.rb
 	rake package:tar
 	cp pkg/puppet-*.tar.gz .
 	tar zxvf puppet-*.tar.gz
