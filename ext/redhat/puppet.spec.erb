@@ -55,7 +55,11 @@ Requires:       facter >= 1.6.11
 # Ruby 1.8.7 available for el5 at: yum.puppetlabs.com/el/5/devel/$ARCH
 Requires:       ruby >= 1.8.7
 Requires:       hiera >= 1.0.0
+%if 0%{?rhel} <= 6
 Requires:       ruby-rgen >= 0.6.5
+%else
+Requires:       rubygem(rgen) >= 0.6.5
+%endif
 Obsoletes:      hiera-puppet < 1.0.0
 Provides:       hiera-puppet >= 1.0.0
 %{!?_without_augeas:Requires: ruby-augeas}
