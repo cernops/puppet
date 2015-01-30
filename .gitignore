@@ -22,3 +22,4 @@ puppet-acceptance/
 .idea/
 .ruby-version
 .ruby-gemset
+puppet*tar.gz
