@@ -1,5 +1,5 @@
 ---
-packaging_url: 'git://github.com/puppetlabs/packaging.git --branch=master'
+packaging_url: 'git://github.com/cernops/packaging.git --branch=master'
 packaging_repo: 'packaging'
 default_cow: 'base-squeeze-i386.cow'
 cows: 'base-lucid-i386.cow base-precise-i386.cow base-squeeze-i386.cow base-stable-i386.cow base-testing-i386.cow base-trusty-i386.cow base-wheezy-i386.cow'
@@ -14,6 +14,7 @@ yum_host: 'yum.puppetlabs.com'
 yum_repo_path: '/opt/repository/yum/'
 build_gem: TRUE
 build_dmg: TRUE
+build_doc: FALSE
 build_msi:
   puppet_for_the_win:
     ref: '4eb71b5b063f611eb447d561d51481831a66b5dd'
