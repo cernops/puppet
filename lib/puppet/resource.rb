@@ -430,7 +430,7 @@ class Puppet::Resource
     result.environment = environment
     result.instance_variable_set(:@rstype, resource_type)
 
-    future_parser_not_in_use = !Puppet.future_parser?(result.environment)
+    future_parser_not_in_use = !Puppet.future_parser?
 
     to_hash.each do |p, v|
       if v.is_a?(Puppet::Resource)
