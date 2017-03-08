@@ -59,6 +59,7 @@ Requires:       facter >= 1:1.7.0
 # Ruby 1.8.7 available for el5 at: yum.puppetlabs.com/el/5/devel/$ARCH
 Requires:       ruby >= 1.8.7
 Requires:       hiera >= 1.0.0
+Requires:       puppet-agent
 Obsoletes:      hiera-puppet < 1.0.0
 Provides:       hiera-puppet >= 1.0.0
 %{!?_without_augeas:Requires: ruby-augeas}
@@ -358,9 +359,10 @@ fi
 if [ "$1" -eq 0 ] ; then
     # Package removal, not upgrade
     /bin/systemctl --no-reload disable puppetagent.service > /dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable puppet.service > /dev/null 2>&1 || :
+    # Disable stop of service.
+    #/bin/systemctl --no-reload disable puppet.service > /dev/null 2>&1 || :
     /bin/systemctl stop puppetagent.service > /dev/null 2>&1 || :
-    /bin/systemctl stop puppet.service > /dev/null 2>&1 || :
+    #/bin/systemctl stop puppet.service > /dev/null 2>&1 || :
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
@@ -382,8 +384,9 @@ fi
 
 %else
 if [ "$1" = 0 ] ; then
-    /sbin/service puppet stop > /dev/null 2>&1
-    /sbin/chkconfig --del puppet || :
+    # Disable stop to help puppet -> puppet-agent migration
+    #/sbin/service puppet stop > /dev/null 2>&1
+    #/sbin/chkconfig --del puppet || :
 fi
 %endif
 
