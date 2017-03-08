@@ -387,6 +387,7 @@ if [ "$1" = 0 ] ; then
     # Disable stop to help puppet -> puppet-agent migration
     #/sbin/service puppet stop > /dev/null 2>&1
     #/sbin/chkconfig --del puppet || :
+    :
 fi
 %endif
 

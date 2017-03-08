@@ -1,0 +1,12 @@
+set name=pkg.fmri value=pkg://puppetlabs.com/system/management/@3.8.7cern2,3.10.0-514.10.2.el7.x86_64-0
+set name=pkg.summary value="Puppet, an automated configuration management tool"
+set name=pkg.human-version value="3.8.7cern2"
+set name=pkg.description value="Puppet, an automated configuration management tool"
+set name=info.classification value="org.opensolaris.category.2008:System/Administration and Configuration"
+set name=org.opensolaris.consolidation value="puppet"
+set name=description value="Puppet, an automated configuration management tool"
+set name=variant.opensolaris.zone value=global value=nonglobal
+set name=variant.arch value=sparc value=i386
+license puppet.license license="Apache v2.0"
+group groupname=puppet
+user username=puppet password='*NP*' group=puppet

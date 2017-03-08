@@ -1,0 +1,38 @@
+---
+packaging_url: 'git://github.com/puppetlabs/packaging.git --branch=master'
+packaging_repo: 'packaging'
+default_cow: 'base-squeeze-i386.cow'
+cows: 'base-precise-i386.cow base-squeeze-i386.cow base-trusty-i386.cow base-wheezy-i386.cow'
+pbuild_conf: '/etc/pbuilderrc'
+packager: 'puppetlabs'
+gpg_name: 'info@puppetlabs.com'
+gpg_key: '4BD6EC30'
+sign_tar: FALSE
+# a space separated list of mock configs
+final_mocks: 'pl-el-5-i386 pl-el-6-i386 pl-el-7-x86_64'
+yum_host: 'yum.puppetlabs.com'
+yum_repo_path: '/opt/repository/yum/'
+build_gem: TRUE
+build_dmg: TRUE
+build_msi:
+  puppet_for_the_win:
+    ref: 'refs/tags/3.8.3'
+    repo: 'git://github.com/puppetlabs/puppet_for_the_win.git'
+  facter:
+    ref: 'refs/tags/2.4.5'
+    repo: 'git://github.com/puppetlabs/facter.git'
+  hiera:
+    ref: 'refs/tags/1.3.4'
+    repo: 'git://github.com/puppetlabs/hiera.git'
+  sys:
+    ref:
+      x86: 'refs/tags/1.9.3-p551.10'
+      x64: 'refs/tags/2.0.0.13-x64'
+    repo: 'git://github.com/puppetlabs/puppet-win32-ruby.git'
+apt_signing_server: 'apt.puppetlabs.com'
+apt_repo_url: 'http://apt.puppetlabs.com'
+apt_repo_path: '/opt/repository/incoming'
+ips_repo: '/var/pkgrepo'
+ips_store: '/opt/repository'
+ips_host: 'solaris-11-ips-repo.acctest.dc1.puppetlabs.net'
+tar_host: 'downloads.puppetlabs.com'
