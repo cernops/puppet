@@ -46,33 +46,42 @@ class Puppet::FileServing::Mount < Puppet::Network::AuthStore
       raise Puppet::Error, message
     end
 
-    node.parameters['::fqdn'] = node.parameters['fqdn'] if node.parameters.include? 'fqdn'
-    node.parameters['::foreman_env'] = node.parameters['foreman_env'] if node.parameters.include? 'foreman_env'
     if node.parameters.include? 'hostgroup'
       hostgroups = node.parameters['hostgroup'].split('/')
       hostgroups.each_index { |idx|
-        node.parameters["::encgroup_#{idx}"] = hostgroups[idx]
+        node.parameters["encgroup_#{idx}"] = hostgroups[idx]
       }
     end
-    hiera = Hiera.new(:config => hiera_config)
-    enable = hiera.lookup(Puppet.settings[:pluginsync_filter_client_enable_key], nil, node.parameters, nil, nil)
+
+    def generate_scope(node)
+      compiler = Puppet::Parser::Compiler.new(node)
+      node.parameters.each do |param, value|
+        compiler.topscope[param.to_s] = value.is_a?(Symbol) ? value.to_s : value
+      end
+      yield compiler.topscope
+    end
+
     whitelist = nil
-    if not enable.nil? and enable == true
-        whitelist = hiera.lookup(Puppet.settings[:pluginsync_filter_client_whitelist_key], nil, node.parameters, nil, :array)
+    generate_scope(node) do |scope|
+      lookup_invocation = Puppet::Pops::Lookup::Invocation.new(scope)
+      loaders = Puppet::Pops::Loaders.new(node.environment)
+      Puppet.override( {:loaders => loaders } , 'For the pluginsync filter') do
+        enable = Puppet::Pops::Lookup.lookup(Puppet.settings[:pluginsync_filter_client_enable_key],
+                                             Puppet::Pops::Types::TypeFactory.boolean(),
+                                             true,
+                                             true,
+                                             nil,
+                                             lookup_invocation)
+        if not enable.nil? and enable
+            whitelist = Puppet::Pops::Lookup.lookup(Puppet.settings[:pluginsync_filter_client_whitelist_key],
+                                                    Puppet::Pops::Types::TypeFactory.iterable(),
+                                                    [],
+                                                    true,
+                                                    'unique',
+                                                    lookup_invocation)
+        end
+      end
     end
-  end
-
-  def hiera_config
-    hiera_config = Puppet.settings[:hiera_config]
-    config = {}
-
-    if ::File.exist?(hiera_config)
-      config = Hiera::Config.load(hiera_config)
-    else
-      Puppet.warning "Config file #{hiera_config} not found, using Hiera defaults"
-    end
-
-    config[:logger] = 'puppet'
-    config
+    whitelist
   end
 end

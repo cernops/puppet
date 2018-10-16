@@ -1,5 +1,4 @@
 require 'puppet/file_serving/mount'
-require 'hiera'
 
 # Find files in the modules' plugins directories.
 # This is a very strange mount because it merges
