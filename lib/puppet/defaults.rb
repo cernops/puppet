@@ -1551,6 +1551,12 @@ EOT
       :default    => lambda { Puppet::Settings.domain_fact },
       :desc       => "The domain which will be queried to find the SRV records of servers to use.",
     },
+    :http_extra_headers => {
+      :default    => [],
+      :type       => :http_extra_headers,
+      :desc       => "The list of extra headers that will be sent with every HTTP request.
+        The header definition consists of a name and a value separated by a colon."
+    },
     :ignoreschedules => {
       :default    => false,
       :type       => :boolean,
