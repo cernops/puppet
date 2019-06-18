@@ -22,7 +22,6 @@ rvm:
 env:
   - "CHECK=parallel:spec\\[2\\]"
   - "CHECK=rubocop"
-  - "CHECK=commits"
   - "CHECK=warnings"
 
 matrix:
@@ -37,16 +36,6 @@ matrix:
       env: "CHECK=rubocop"
     - rvm: 1.9.3
       env: "CHECK=rubocop"
-    - rvm: 2.4
-      env: "CHECK=commits"
-    - rvm: 2.3
-      env: "CHECK=commits"
-    - rvm: 2.2
-      env: "CHECK=commits"
-    - rvm: 2.0
-      env: "CHECK=commits"
-    - rvm: 1.9.3
-      env: "CHECK=commits"
     - rvm: 2.3
       env: "CHECK=warnings"
     - rvm: 2.2
