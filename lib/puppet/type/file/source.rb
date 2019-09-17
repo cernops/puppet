@@ -303,7 +303,9 @@ module Puppet
 
       request.do_request(:fileserver) do |req|
         connection = Puppet::Network::HttpPool.http_instance(req.server, req.port)
-        connection.request_get(Puppet::Network::HTTP::API::IndirectedRoutes.request_to_uri(req), add_accept_encoding({"Accept" => BINARY_MIME_TYPES}), &block)
+        headers = add_accept_encoding({"Accept" => BINARY_MIME_TYPES})
+        headers = Puppet::Util::Connection.add_extra_headers(headers)
+        connection.request_get(Puppet::Network::HTTP::API::IndirectedRoutes.request_to_uri(req), headers, &block)
       end
     end
 
