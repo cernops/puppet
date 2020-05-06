@@ -488,6 +488,7 @@ class Puppet::Parser::Compiler
 
   # If ast nodes are enabled, then see if we can find and evaluate one.
   def evaluate_ast_node
+    return
     krt = environment.known_resource_types
     return unless krt.nodes? #ast_nodes?
 
