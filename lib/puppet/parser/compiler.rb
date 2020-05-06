@@ -353,6 +353,7 @@ class Puppet::Parser::Compiler
   #
   # @api private
   def evaluate_ast_node
+    return
     krt = environment.known_resource_types
     return unless krt.nodes? #ast_nodes?
 
