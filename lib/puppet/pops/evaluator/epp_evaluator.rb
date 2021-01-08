@@ -28,6 +28,11 @@ class Puppet::Pops::Evaluator::EppEvaluator
       raise ArgumentError, _("epp(): the first argument must be a String with the filename, got a %{class_name}") % { class_name: file.class }
     end
 
+    require 'java'
+    thread_name = java.lang.Thread.currentThread().getName()
+    Puppet::Util::Log.log_func(scope, :warning, ["epp_evaluator@epp() (#{thread_name}) - Start #{file}"])
+    Puppet::Util::Log.log_func(scope, :warning, ["epp_evaluator@epp() (#{thread_name}) - Args #{template_args}"])
+
     unless Puppet::FileSystem.exist?(file)
       unless file =~ /\.epp$/
         file = file + ".epp"
@@ -50,7 +55,9 @@ class Puppet::Pops::Evaluator::EppEvaluator
     end
 
     # Evaluate (and check template_args)
-    evaluate(parser, 'epp', scope, true, result, template_args)
+    rett = evaluate(parser, 'epp', scope, true, result, template_args)
+    Puppet::Util::Log.log_func(scope, :warning, ["epp_evaluator@epp() (#{thread_name}) - End #{file}"])
+    rett
   end
 
   def self.evaluate(parser, func_name, scope, use_global_scope_only, parse_result, template_args)
