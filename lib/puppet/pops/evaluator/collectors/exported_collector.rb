@@ -18,9 +18,7 @@ class Puppet::Pops::Evaluator::Collectors::ExportedCollector < Puppet::Pops::Eva
   # Ensures that storeconfigs is present before calling AbstractCollector's
   # evaluate method
   def evaluate
-    if Puppet[:storeconfigs] != true
-      return false
-    end
+    return false
 
     super
   end
